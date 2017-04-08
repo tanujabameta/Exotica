@@ -14,9 +14,10 @@
     <body>
         <%
             session.invalidate();
-            response.sendRedirect("home.html");
+            //response.sendRedirect("login1.jsp");
             
             %>
+
     </body>
 </html>
  

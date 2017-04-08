@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,15 +61,26 @@ public class loginclass {
             Context ctx=new InitialContext();
             DataSource ds=(DataSource)ctx.lookup("jdbc/__default");
             Connection con=ds.getConnection();
-            PreparedStatement st=con.prepareStatement("select * from register where login=? and password=?");
+            PreparedStatement st=con.prepareStatement("select * from register where login=? ");
             st.setString(1,login);
-            st.setString(2,password);
             ResultSet rs=st.executeQuery();
-            if(rs.next())
+            while(rs.next())
             {
-                r=1;
-            }
-            return r;
+//            String checkUser = this.getLogin();
+            String checkPass = this.getPassword();
+            String password = rs.getString(5);
+        if( (checkPass.equals(password)))
+        {
+           r=1;
+        }
+        else
+        {
+            r=0;
+        }
+
+       
+      
     }
-    
+  return r;     
+}
 }

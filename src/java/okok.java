@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -23,8 +22,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author TANUJA BAMETA
  */
-@WebServlet(urlPatterns = {"/logincontroller"})
-public class logincontroller extends HttpServlet {
+@WebServlet(urlPatterns = {"/okok"})
+public class okok extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,52 +36,33 @@ public class logincontroller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-            String login=request.getParameter("login");
-            String pass=request.getParameter("pass");
-            loginclass lc=new loginclass();
-            lc.setLogin(login);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            String usr  = request.getParameter("login");
+            String pass  = request.getParameter("pass");
+            Cookie c1=new Cookie("user",usr);
+            Cookie c2=new Cookie("pass",pass);            
+            loginclass lc = new loginclass();
+            lc.setLogin(usr);
             lc.setPassword(pass);
-            int rs=lc.logdata();
-            String s=request.getParameter("check");
-           if(!s.equals(null))
-           {
-           int age=60*60*30;
-                      Cookie c1=new Cookie("user",login);
+            int da = lc.logdata();
+            String s = request.getParameter("check");
+          if(s == "checked")
+           {              
+                      int age=60*60*30;
                       c1.setMaxAge(age);
                       response.addCookie(c1);
-                        Cookie c2=new Cookie("pass",pass);
-                        c2.setMaxAge(age);
+                      c2.setMaxAge(age);
                       response.addCookie(c2);
-                 
-           }
-                   
-            
-               
-            
-             if(rs==1)
-            {
-            RequestDispatcher rd=request.getRequestDispatcher("aflogin.jsp");
-            rd.forward(request, response);
-             HttpSession session=request.getSession();
-             session.setAttribute("login", login);
-            rd.forward(request, response);
-            
-            }
-            else
-            {
-            RequestDispatcher rm=request.getRequestDispatcher("http://localhost:8080/WebApplication5/registra.html");
-            rm.forward(request, response);
-            }
-            out.println("</body>");
-            out.println("</html>");
+            } 
+          if(da == 1){
+            //  HttpSession sess = request.getSession();
+              //sess.setAttribute("username", usr);
+              response.sendRedirect("index.html");
+          }else{
+              response.sendRedirect("registra.html");
+          }
         }
-
-       catch(Exception e)
-        {
-            System.out.println(e);
-        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -97,12 +77,12 @@ public class logincontroller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(logincontroller.class.getName()).log(Level.SEVERE, null, ex);
+        try{
+        processRequest(request, response);
+        }catch(NamingException ne){
+            
         } catch (SQLException ex) {
-            Logger.getLogger(logincontroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(okok.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -120,9 +100,9 @@ public class logincontroller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(logincontroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(okok.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(logincontroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(okok.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -136,12 +116,4 @@ public class logincontroller extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private boolean isChecked(String s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }
-
-  //  private boolean isChecked(String parameter) {
-    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   // }
