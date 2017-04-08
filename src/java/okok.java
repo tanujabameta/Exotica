@@ -58,7 +58,7 @@ public class okok extends HttpServlet {
           if(da == 1){
             //  HttpSession sess = request.getSession();
               //sess.setAttribute("username", usr);
-              response.sendRedirect("index.html");
+              response.sendRedirect("nhome.html");
           }else{
               response.sendRedirect("registra.html");
           }
